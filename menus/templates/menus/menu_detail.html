@@ -1,0 +1,44 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<p>Hello!</p>
+<p>{{ object.description}}</p>
+<ul>
+{% for option in object.options.all %}
+    <li>Option {{ forloop.counter }}: {{ option.name }}</li>
+{% endfor %}
+</ul>
+<p>Have a nice day!</p>
+    <a href="{% url 'menu-list' %}">Back <-</a>
+<hr>
+{% if user.is_authenticated %}
+{% if is_employee %}
+    {% if order %}
+        <p>You already request! </p>
+        <p>Option selected: {{ order.option.name }}</p>
+        <p>Customization: {{ order.customization }}</p>
+    {% else %}
+        <form action="{% url 'menu-detail' object.id %}" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit">
+        </form>
+    {% endif %}
+{% else %}
+    {% if orders %}
+        <p>Requests</p>
+        <ul>
+        {% for order in orders %}
+            <li>
+                <p>Employee: {{ order.order_by.email }}</p>
+                <p>Customization:{{ order.customization }}</p>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No orders yet!</p>
+    {% endif %}
+
+{% endif %}
+{% endif %}
+{% endblock %}

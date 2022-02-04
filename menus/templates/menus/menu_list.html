@@ -1,0 +1,17 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<h1>Menus</h1>
+{% if not is_employee %}<a href="{% url 'menu-add' %}">New menu</a>{% endif %}
+<ul>
+{% for menu in object_list %}
+    <li><a href="{% url 'menu-detail' menu.id %}">{{ menu.date |date }} -
+        {{ menu.description }}</a>
+        {% if not is_employee %} - <a href="
+{% url 'menu-update' menu.id %}">Edit</a></li>{% endif %}
+{% empty %}
+    <li>No menus yet.</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
